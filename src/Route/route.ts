@@ -4,7 +4,7 @@ import Link from "../Models/Link";
 const router: Router = Router();
 
 router.get("/", (req: Request, res: Response) =>
-  res.json({ message: "Hello world" })
+  res.status(200).json({ message: "Hello world" })
 );
 
 router.post("/new", async (req: Request, res: Response) => {
@@ -13,9 +13,9 @@ router.post("/new", async (req: Request, res: Response) => {
   if (urlChecked) {
     const code = generateCode();
     const result = await Link.create({ url, code });
-    res.json(result.dataValues);
+    res.status(201).json(result.dataValues);
   } else {
-    res.json({ message: "Invalid URL" });
+    res.status(400).json({ message: "Invalid URL, ensure HTTP or HTTPS" });
   }
 });
 
