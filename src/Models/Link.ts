@@ -5,7 +5,9 @@ interface LinkAttributes {
   id: number;
   code: string;
   url: string;
-  hits: number;
+  hits?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface LinkCreationAttributes extends Optional<LinkAttributes, "id"> {}
@@ -36,9 +38,30 @@ Link.init(
     url: {
       type: new DataTypes.STRING(128),
       allowNull: false,
+      validate: {
+        isURL: {
+          msg: "Invalid URL",
+          args: [
+            {
+              protocols: ["https", "http"],
+              require_valid_protocol: true,
+              require_protocol: true,
+            },
+          ],
+        },
+      },
     },
     hits: {
       type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
       allowNull: true,
     },
   },
